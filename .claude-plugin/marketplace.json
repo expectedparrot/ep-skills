@@ -1,20 +1,23 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ep-skills",
+  "description": "EDSL skills for AI-powered survey research with Expected Parrot",
   "owner": {
-    "name": "Expected Parrot"
-  },
-  "metadata": {
-    "description": "EDSL skills for AI-powered survey research with Expected Parrot",
-    "pluginRoot": "./plugins"
+    "name": "Expected Parrot",
+    "email": "info@expectedparrot.com"
   },
   "plugins": [
     {
       "name": "edsl-research",
-      "source": "./plugins/edsl-research",
       "description": "Complete AI-powered survey research workflow: experiment design, survey creation, agent generation, result analysis, and GitHub publication",
       "version": "1.0.0",
+      "author": {
+        "name": "Expected Parrot",
+        "email": "info@expectedparrot.com"
+      },
+      "source": "./plugins/edsl-research",
       "category": "research",
-      "keywords": ["edsl", "survey", "research", "experiment", "agents", "expected-parrot"]
+      "homepage": "https://github.com/expectedparrot/ep-skills"
     }
   ]
 }
