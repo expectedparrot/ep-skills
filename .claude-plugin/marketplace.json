@@ -1,0 +1,20 @@
+{
+  "name": "ep-skills",
+  "owner": {
+    "name": "Expected Parrot"
+  },
+  "metadata": {
+    "description": "EDSL skills for AI-powered survey research with Expected Parrot",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "edsl-research",
+      "source": "./plugins/edsl-research",
+      "description": "Complete AI-powered survey research workflow: experiment design, survey creation, agent generation, result analysis, and GitHub publication",
+      "version": "1.0.0",
+      "category": "research",
+      "keywords": ["edsl", "survey", "research", "experiment", "agents", "expected-parrot"]
+    }
+  ]
+}
