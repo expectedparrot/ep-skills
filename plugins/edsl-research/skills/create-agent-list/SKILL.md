@@ -10,7 +10,7 @@ arguments: agent_list_description
 
 ## Generating Agents
 
-Agents can be generated from descriptions or external sources (not just loaded from files):
+Agents can be generated from descriptions or external sources:
 
 ```python
 # Example: Generate agents from web search results
@@ -38,6 +38,12 @@ agent2 = Agent(traits={"age": 35, "occupation": "doctor"})
 
 # Combine into AgentList
 agents = AgentList([agent1, agent2])
+```
+
+Agents can take a separate name parameter e.g., 
+
+```python
+a = Agent(name = 'John', traits={"age": 25, "occupation": "teacher"})
 ```
 
 ## From External Data Sources
@@ -112,17 +118,16 @@ agents = AgentList([
 | DataFrame | `AgentList.from_source(df)` |
 
 
-## Saving 
+## Saving / Persistence
 
 You will create a Python file with a descriptive name e.g., 'occupation_agent_list.py'
 Whatever the name of your agent list, you will also save it as local JSON file:
 ```python
-import os
-agent_list_name = os.path.splitext(os.path.basename(__file__))[0]
-agent.save(survey_name)
+agent.save('occupation_agent_list')
 ```
 
-You can also ask the user if they want to push that agent list to coop (Expected Parrot's servers).
+## Sharing
+Ask the user if they want to push that agent list to coop (Expected Parrot's servers).
 
 Use `AskUserQuestion` to ask the user:
 - "Should we push this agent list to Expected Parrot?"
@@ -144,4 +149,5 @@ agent_list.push(
     alias = "<valid url slug>"
 )
 ```
-After pushing, you should print the results so the user can see them. If there is any error in pushing from your parameters, update the names.
+After pushing, you should print the results so the user can see them. 
+If there is any error in pushing from your parameters, update the names.
