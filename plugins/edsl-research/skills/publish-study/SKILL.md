@@ -96,6 +96,7 @@ mkdir -p /tmp/publish-study-staging
 mkdir -p /tmp/publish-study-staging/images
 mkdir -p /tmp/publish-study-staging/data
 mkdir -p /tmp/publish-study-staging/questions
+mkdir -p /tmp/publish-study-staging/study
 ```
 
 #### File Mapping
@@ -104,8 +105,13 @@ mkdir -p /tmp/publish-study-staging/questions
 |--------|-------------------|-------|
 | `analysis_N/report.md` | `README.md` | Rewrite image/data paths, append reproducibility footer |
 | `analysis_N/*.png` | `images/*.png` | All chart PNGs from the analysis |
-| `experiment_design.md` | `experiment_design.md` | Research design document |
-| `*_study.py` (or similar) | `study.py` | The experiment script |
+| `study_*.py` | `study/study_*.py` | All EDSL component files (survey, agents, models, scenarios) |
+| `create_results.py` | `study/create_results.py` | Results runner script |
+| `analyze_*.py` | `study/analyze_*.py` | Analysis scripts |
+| `Makefile` | `study/Makefile` | Build system |
+| `design_spec.json` | `study/design_spec.json` | Experimental design spec |
+| `conjoint_choice_sets.json` | `study/conjoint_choice_sets.json` | Choice sets (if conjoint) |
+| `*.md` (top-level, not README) | `study/*.md` | Design docs (conjoint_design.md, experiment_design.md) |
 | `analysis_N/survey.md` | `survey.md` | Survey documentation |
 | `analysis_N/results.csv` | `data/results.csv` | Tabular results |
 | `analysis_N/<slug>/answer.md` | `questions/<slug>.md` | Answer-question outputs (if any) |
@@ -121,18 +127,27 @@ STAGING="/tmp/publish-study-staging"
 
 # Clean staging area
 rm -rf "$STAGING"
-mkdir -p "$STAGING/images" "$STAGING/data" "$STAGING/questions"
+mkdir -p "$STAGING/images" "$STAGING/data" "$STAGING/questions" "$STAGING/study"
 
 # Copy analysis PNGs to images/
 cp "$ANALYSIS_DIR"/*.png "$STAGING/images/" 2>/dev/null || true
 
-# Copy experiment design
-cp "$STUDY_DIR/experiment_design.md" "$STAGING/experiment_design.md" 2>/dev/null || true
+# Copy all study Python files into study/ directory
+cp "$STUDY_DIR"/study_*.py "$STAGING/study/" 2>/dev/null || true
+cp "$STUDY_DIR"/create_results.py "$STAGING/study/" 2>/dev/null || true
+cp "$STUDY_DIR"/analyze_*.py "$STAGING/study/" 2>/dev/null || true
 
-# Copy study script (find the *_study.py or similar)
-cp "$STUDY_DIR"/*_study.py "$STAGING/study.py" 2>/dev/null || \
-cp "$STUDY_DIR"/*_survey.py "$STAGING/study.py" 2>/dev/null || \
-cp "$STUDY_DIR"/*.py "$STAGING/study.py" 2>/dev/null || true
+# Copy Makefile
+cp "$STUDY_DIR"/Makefile "$STAGING/study/" 2>/dev/null || true
+
+# Copy JSON design files
+cp "$STUDY_DIR"/design_spec.json "$STAGING/study/" 2>/dev/null || true
+cp "$STUDY_DIR"/conjoint_choice_sets.json "$STAGING/study/" 2>/dev/null || true
+
+# Copy design/experiment docs (top-level .md files, excluding README)
+for md in "$STUDY_DIR"/*.md; do
+  [ -f "$md" ] && cp "$md" "$STAGING/study/" 2>/dev/null || true
+done
 
 # Copy survey documentation
 cp "$ANALYSIS_DIR/survey.md" "$STAGING/survey.md" 2>/dev/null || true
@@ -216,7 +231,11 @@ df = results.to_pandas()
 
 ### Study Code
 
-The experiment script is available in [`study.py`](study.py). The experimental design is documented in [`experiment_design.md`](experiment_design.md).
+The full study code is available in the [`study/`](study/) directory, including:
+- EDSL component definitions (survey, agents, models, scenarios)
+- Results runner script
+- Makefile for reproducibility
+- Experimental design specification
 
 ### License
 
@@ -246,7 +265,11 @@ This study was conducted using [Expected Parrot EDSL](https://docs.expectedparro
 
 ### Study Code
 
-The experiment script is available in [`study.py`](study.py). The experimental design is documented in [`experiment_design.md`](experiment_design.md).
+The full study code is available in the [`study/`](study/) directory, including:
+- EDSL component definitions (survey, agents, models, scenarios)
+- Results runner script
+- Makefile for reproducibility
+- Experimental design specification
 
 ### License
 
@@ -362,28 +385,36 @@ Question: (none — just report)
 Example output:
 
 ```
-Published to: https://github.com/<user>/do-llms-exhibit-maternal-default-bias-when
+Published to: https://github.com/<user>/demand-and-price-sensitivity-for-frozen-chicken
 
 Repository contents:
-- README.md (analysis report with 6 charts)
-- experiment_design.md
-- study.py
+- README.md (analysis report with 3 charts)
 - survey.md
+- study/ (11 files: Python scripts, Makefile, design specs, docs)
 - data/results.csv
-- images/ (6 PNGs)
+- images/ (3 PNGs)
 - LICENSE (MIT)
 
 Results are also available on Expected Parrot:
   https://expectedparrot.com/content/<uuid>
 ```
 
-## Example: Publishing the Maternal Default Bias Study
+## Example: Publishing a Conjoint Study
 
 Given a study directory:
 ```
-2026-02-08_do-llms-exhibit-maternal-default-bias-when/
+2026-02-11_demand-and-price-sensitivity-for-frozen-chicken/
 ├── experiment_design.md
-├── maternal_default_bias_study.py
+├── conjoint_design.md
+├── design_spec.json
+├── conjoint_choice_sets.json
+├── study_survey.py
+├── study_agent_list.py
+├── study_model_list.py
+├── study_scenario_list.py
+├── create_results.py
+├── analyze_conjoint.py
+├── Makefile
 ├── results.json.gz
 ├── results.csv
 └── analysis_1/
@@ -391,41 +422,43 @@ Given a study directory:
     ├── report.html
     ├── survey.md
     ├── results.csv
-    ├── confidence_by_choice.png
-    ├── context_effect_by_model.png
-    ├── manipulation_check.png
-    ├── maternal_default_by_model.png
-    ├── maternal_default_heatmap.png
-    ├── order_effect_by_model.png
-    └── urgency_effect_by_model.png
+    ├── part_worth_utilities.png
+    ├── attribute_importance.png
+    └── segment_analysis.png
 ```
 
 The published repo would contain:
 ```
-do-llms-exhibit-maternal-default-bias-when/
+demand-and-price-sensitivity-for-frozen-chicken/
 ├── README.md                        # report.md with rewritten paths + reproducibility footer
-├── experiment_design.md
-├── study.py                         # maternal_default_bias_study.py
 ├── survey.md
 ├── LICENSE
 ├── data/
 │   └── results.csv
-└── images/
-    ├── confidence_by_choice.png
-    ├── context_effect_by_model.png
-    ├── manipulation_check.png
-    ├── maternal_default_by_model.png
-    ├── maternal_default_heatmap.png
-    ├── order_effect_by_model.png
-    └── urgency_effect_by_model.png
+├── images/
+│   ├── part_worth_utilities.png
+│   ├── attribute_importance.png
+│   └── segment_analysis.png
+└── study/
+    ├── study_survey.py
+    ├── study_agent_list.py
+    ├── study_model_list.py
+    ├── study_scenario_list.py
+    ├── create_results.py
+    ├── analyze_conjoint.py
+    ├── Makefile
+    ├── design_spec.json
+    ├── conjoint_choice_sets.json
+    ├── experiment_design.md
+    └── conjoint_design.md
 ```
 
 ## Checklist Before Publishing
 
 - [ ] Study directory exists and contains `results.json.gz`
 - [ ] At least one `analysis_N/` directory has a `report.md`
-- [ ] `experiment_design.md` exists in the study directory
-- [ ] A Python study script exists (e.g., `*_study.py`)
+- [ ] `study/` directory contains Python files (study_*.py, create_results.py, etc.)
+- [ ] `study/` directory contains design docs (experiment_design.md, design_spec.json, etc.)
 - [ ] All image paths in README.md point to `images/`
 - [ ] results.csv link points to `data/results.csv`
 - [ ] Reproducibility footer includes EP link (if push succeeded)
@@ -438,8 +471,13 @@ do-llms-exhibit-maternal-default-bias-when/
 | File | Description |
 |------|-------------|
 | `README.md` | Analysis report adapted for GitHub with image paths rewritten and reproducibility footer |
-| `experiment_design.md` | Full experimental design document |
-| `study.py` | Python script that defines and runs the study |
+| `study/study_*.py` | EDSL component definitions (survey, agents, models, scenarios) |
+| `study/create_results.py` | Results runner script |
+| `study/analyze_*.py` | Analysis scripts |
+| `study/Makefile` | Build system for reproducibility |
+| `study/design_spec.json` | Experimental design specification |
+| `study/conjoint_choice_sets.json` | Choice set definitions (if conjoint) |
+| `study/*.md` | Design docs (experiment_design.md, conjoint_design.md) |
 | `survey.md` | Survey documentation (questions, types, options) |
 | `data/results.csv` | Tabular results data |
 | `images/*.png` | All analysis chart PNGs |
