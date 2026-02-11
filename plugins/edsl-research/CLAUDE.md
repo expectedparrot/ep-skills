@@ -8,8 +8,9 @@ Use this to pick the right skill based on user intent:
 
 ### Research Workflows (typical sequences)
 ```
-General:  Research question → /design-experiment → /create-study → /analyze-results → /answer-question → /publish-study
-Conjoint: Research question → /conjoint-study → /analyze-conjoint-results → /publish-study
+General:   Research question → /design-experiment → /create-study → /analyze-results → /answer-question → /publish-study
+Conjoint:  Research question → /conjoint-study → /analyze-conjoint-results → /publish-study
+Interview: Research question → /create-interview-guide → /create-agent-list → run → /analyze-results
 ```
 
 ### By User Intent
@@ -24,6 +25,7 @@ Conjoint: Research question → /conjoint-study → /analyze-conjoint-results �
 | "What does this result mean?" / follow-up on analysis | `/answer-question` |
 | "Publish this study" / "Share on GitHub" | `/publish-study` |
 | "Conjoint analysis" / "Choice experiment" / "Product preference" | `/conjoint-study` |
+| "Qualitative interview" / "Interview guide" / "AI-led interview" | `/create-interview-guide` |
 | "Find existing surveys/agents/results" | `/search-objects` |
 
 ### Reference Skills (used internally by workflow skills)
