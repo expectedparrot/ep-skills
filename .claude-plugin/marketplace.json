@@ -10,7 +10,7 @@
     {
       "name": "edsl-research",
       "description": "Complete AI-powered survey research workflow: experiment design, survey creation, agent generation, result analysis, and GitHub publication",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Expected Parrot",
         "email": "info@expectedparrot.com"
