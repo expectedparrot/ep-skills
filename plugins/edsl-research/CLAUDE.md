@@ -21,6 +21,7 @@ Research question → /design-experiment → /create-study → /analyze-results 
 | "I have results to analyze" / "Analyze this data" | `/analyze-results` |
 | "What does this result mean?" / follow-up on analysis | `/answer-question` |
 | "Publish this study" / "Share on GitHub" | `/publish-study` |
+| "Conjoint analysis" / "Choice experiment" / "Product preference" | `/conjoint-study` |
 | "Find existing surveys/agents/results" | `/search-objects` |
 
 ### Reference Skills (used internally by workflow skills)
@@ -41,3 +42,4 @@ This plugin includes bundled files referenced by skills:
 |---|---|---|
 | `assets/report.css` | `analyze-results`, `answer-question` | `Glob("**/assets/report.css")` |
 | `skills/design-experiment/helpers.py` | `design-experiment` | `Glob("**/design-experiment/helpers.py")` |
+| `skills/conjoint-study/helpers.py` | `conjoint-study` | `Glob("**/conjoint-study/helpers.py")` |
