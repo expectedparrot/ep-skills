@@ -416,10 +416,10 @@ cd <dir_name> && python3 analyze_conjoint.py
 Question: "The conjoint analysis is complete. What would you like to do next?"
 Header: "Next steps"
 Options:
-  1. "Run market simulation" - "Predict choice shares for specific product profiles"
-  2. "Explore further with /analyze-results" - "Do additional analysis on the raw results"
-  3. "Publish with /publish-study" - "Share the study on GitHub"
-  4. "Done" - "No further analysis needed"
+  1. "Generate full report with /analyze-conjoint-results (Recommended)" - "Comprehensive HTML report with executive summary, methodology, charts, segment analysis, and limitations"
+  2. "Run market simulation" - "Predict choice shares for specific product profiles"
+  3. "Explore further with /analyze-results" - "Do additional generic analysis on the raw results"
+  4. "Publish with /publish-study" - "Share the study on GitHub"
 ```
 
 If "Run market simulation", ask for competing product profiles and run:
